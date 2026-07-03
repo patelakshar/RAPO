@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rapo"
+version = "0.1.0"
+description = "Red-team Automated Pen-testing Operator"
+authors = [
+    { name = "Akshar Patel" }
+]
+requires-python = ">=3.11"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+rapo = "rapo.core.main:main"

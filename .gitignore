@@ -1,13 +1,33 @@
 # Python
 __pycache__/
 *.py[cod]
+*.so
 
 # Virtual Environment
 .venv/
+venv/
+
+# Build
+build/
+dist/
+*.egg-info/
 
 # macOS
 .DS_Store
 
-# IDE
-.vscode/
-.idea/
+# VS Code
+.vscode/settings.json
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Python Cache
+.pytest_cache/
+.mypy_cache/
+
+# Reports
+reports/*.html
+reports/*.pdf
