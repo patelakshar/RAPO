@@ -19,3 +19,5 @@ reports/
 # IDE
 .vscode/
 .idea/
+.continue/
+.akydev/
