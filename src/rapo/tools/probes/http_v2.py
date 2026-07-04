@@ -1,2 +1,0 @@
-def probe():
-    return True
