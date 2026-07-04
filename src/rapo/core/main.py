@@ -1,39 +1,21 @@
-"""
-RAPO
-Red-team Automated Pen-testing Operator
+import json
+import typer
 
-Main Entry Point
-"""
+from rapo.core.router import run
 
-import sys
-
-from rapo.config.settings import (
-    APP_NAME,
-    VERSION,
-    AUTHOR,
-    BANNER
+app = typer.Typer(
+    help="RAPO - Red-team Automated Pen-testing Operator"
 )
 
-from rapo.core.logger import Logger
-from rapo.core.router import route
 
-
-def main():
-    print(BANNER)
-    print(APP_NAME)
-    print(f"Version : {VERSION}")
-    print(f"Author  : {AUTHOR}")
-    print(BANNER)
-
-    if len(sys.argv) < 3:
-        Logger.error("Usage: rapo scan <target>")
-        return
-
-    command = sys.argv[1]
-    target = sys.argv[2]
-
-    route(command, target)
+@app.command()
+def scan(target: str):
+    """
+    Run reconnaissance against a target.
+    """
+    result = run(target)
+    print(json.dumps(result, indent=4))
 
 
 if __name__ == "__main__":
-    main()
+    app()
