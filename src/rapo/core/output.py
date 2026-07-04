@@ -123,6 +123,85 @@ def _render_sitemap_section(sitemap_data: Any) -> None:
     )
 
 
+def _render_common_files_section(common_files_data: Any) -> None:
+    findings = []
+    if isinstance(common_files_data, dict):
+        findings = common_files_data.get("findings", []) or []
+
+    if not findings:
+        console.print(
+            Panel(
+                "[bold yellow]No interesting files discovered.[/bold yellow]",
+                title="[bold cyan]📂 Common Files[/bold cyan]",
+                border_style="bright_blue",
+                expand=True,
+            )
+        )
+        return
+
+    table = Table(show_header=False, box=None, pad_edge=False)
+    table.add_column("Field", style="bold cyan", width=28)
+    table.add_column("Value", overflow="fold")
+
+    for finding in findings:
+        path = finding.get("path", "")
+        status = finding.get("status", "")
+        content_length = finding.get("content_length", "")
+        redirect = finding.get("redirect", "") or ""
+        table.add_row("Path", str(path))
+        table.add_row("Status", str(status))
+        table.add_row("Content Length", str(content_length))
+        table.add_row("Redirect", redirect or "-")
+        table.add_row("", "")
+
+    console.print(
+        Panel(
+            table,
+            title="[bold cyan]📂 Common Files[/bold cyan]",
+            border_style="bright_blue",
+            expand=True,
+        )
+    )
+
+
+def _render_http_methods_section(http_methods_data: Any) -> None:
+    if not isinstance(http_methods_data, dict):
+        http_methods_data = {}
+
+    allow = http_methods_data.get("allow", []) or []
+    public = http_methods_data.get("public", []) or []
+    dangerous = http_methods_data.get("dangerous", []) or []
+
+    if not allow and not public and not dangerous:
+        console.print(
+            Panel(
+                "[bold yellow]No methods discovered.[/bold yellow]",
+                title="[bold cyan]🌐 HTTP Methods[/bold cyan]",
+                border_style="bright_blue",
+                expand=True,
+            )
+        )
+        return
+
+    table = Table(show_header=False, box=None, pad_edge=False)
+    table.add_column("Field", style="bold cyan", width=28)
+    table.add_column("Value", overflow="fold")
+
+    table.add_row("Status", str(http_methods_data.get("status", 0)))
+    table.add_row("Allowed Methods", _format_value(allow))
+    table.add_row("Public Methods", _format_value(public))
+    table.add_row("Potentially Dangerous Methods", _format_value(dangerous))
+
+    console.print(
+        Panel(
+            table,
+            title="[bold cyan]🌐 HTTP Methods[/bold cyan]",
+            border_style="bright_blue",
+            expand=True,
+        )
+    )
+
+
 def _get_section(results: dict[str, Any], *keys: str) -> Any:
     for key in keys:
         if key in results:
@@ -171,6 +250,8 @@ Version 0.1
     _render_section("🛡 Security Headers", _get_section(results, "security_headers", "headers", "headers_results"))
     _render_robots_section(_get_section(results, "robots"))
     _render_sitemap_section(_get_section(results, "sitemap"))
+    _render_common_files_section(_get_section(results, "common_files"))
+    _render_http_methods_section(_get_section(results, "http_methods"))
 
     console.print(
         Panel(
