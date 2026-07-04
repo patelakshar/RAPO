@@ -1,0 +1,2 @@
+def probe():
+    return True

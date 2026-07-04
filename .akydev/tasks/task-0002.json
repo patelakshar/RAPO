@@ -1,0 +1,8 @@
+{
+    "id": 2,
+    "title": "Create a Python tool named dns_lookup.py in src/rapo/tools. The tool must expose a function lookup(domain: str) -> list[str] that resolves A records using Python's socket module. Return ONLY valid JSON following the AKYDev change schema.",
+    "status": "pending",
+    "priority": "normal",
+    "created": "2026-07-04T22:49:06",
+    "workspace": "RAPO"
+}

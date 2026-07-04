@@ -1,43 +1,40 @@
-"""
-RAPO DNS Resolver
-"""
-
-import socket
-
-from rapo.core.logger import Logger
+import dns.resolver
+from typing import Dict, List
 
 
-def resolve(target: str) -> dict:
+RECORD_TYPES = [
+    "A",
+    "AAAA",
+    "MX",
+    "NS",
+    "TXT",
+    "CNAME",
+]
+
+
+def enumerate_dns(domain: str) -> Dict[str, List[str]]:
     """
-    Resolve a hostname to an IPv4 address.
-
-    Returns:
-        {
-            "success": bool,
-            "hostname": str,
-            "ip": str | None,
-            "error": str | None
-        }
+    Enumerate common DNS records.
     """
 
-    try:
-        ip = socket.gethostbyname(target)
+    results: Dict[str, List[str]] = {}
 
-        Logger.success(f"Resolved {target} -> {ip}")
+    resolver = dns.resolver.Resolver()
 
-        return {
-            "success": True,
-            "hostname": target,
-            "ip": ip,
-            "error": None,
-        }
+    for record in RECORD_TYPES:
 
-    except Exception as e:
-        Logger.error(f"DNS resolution failed: {e}")
+        values: List[str] = []
 
-        return {
-            "success": False,
-            "hostname": target,
-            "ip": None,
-            "error": str(e),
-        }
+        try:
+
+            answers = resolver.resolve(domain, record)
+
+            for answer in answers:
+                values.append(str(answer))
+
+        except Exception:
+            pass
+
+        results[record] = values
+
+    return results

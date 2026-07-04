@@ -1,0 +1,11 @@
+{
+    "Project": "RAPO",
+    "Git": true,
+    "README": false,
+    "Tests": false,
+    "Python Project": true,
+    "Source": true,
+    "Python Files": 24,
+    "Packages": 3,
+    "Entry Point": "src/rapo/core/main.py"
+}

@@ -1,0 +1,9 @@
+{
+    "changes": [
+        {
+            "change_type": "create_file",
+            "file_path": "src/rapo/tools/dns_lookup.py",
+            "content": "import socket\nfrom typing import List\n\ndef lookup(domain: str) -> List[str]:\n    \"\"\"\n    Resolves A records for a given domain using Python's socket module.\n\n    Args:\n        domain (str): The domain name to resolve.\n\n    Returns:\n        List[str]: A list of IP addresses (A records) associated with the domain.\n                   Returns an empty list if the domain cannot be resolved or no A records are found.\n    \"\"\"\n    try:\n        # socket.gethostbyname_ex returns (hostname, aliaslist, ipaddrlist)\n        # We are interested in ipaddrlist\n        _hostname, _aliaslist, ipaddrlist = socket.gethostbyname_ex(domain)\n        return ipaddrlist\n    except socket.gaierror:\n        # Host not found or other DNS resolution error\n        return []\n    except Exception:\n        # Catch any other unexpected errors\n        return []\n"
+        }
+    ]
+}
