@@ -1,6 +1,6 @@
-import json
 import typer
 
+from rapo.core.output import display
 from rapo.core.router import run
 
 app = typer.Typer(
@@ -13,8 +13,8 @@ def scan(target: str):
     """
     Run reconnaissance against a target.
     """
-    result = run(target)
-    print(json.dumps(result, indent=4))
+    results = run(target)
+    display(results)
 
 
 if __name__ == "__main__":

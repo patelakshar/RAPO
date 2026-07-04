@@ -4,6 +4,9 @@ from rapo.tools.ports import scan_ports
 from rapo.tools.whois import lookup
 from rapo.tools.tech import detect
 from rapo.tools.ssl import analyze
+from rapo.tools.security_headers import analyze as analyze_security_headers
+from rapo.tools.robots import scan as scan_robots
+from rapo.tools.sitemap import scan as scan_sitemap
 
 
 def run(target: str) -> dict:
@@ -12,10 +15,14 @@ def run(target: str) -> dict:
     """
 
     return {
+        "target": target,
         "dns": enumerate_dns(target),
         "http": probe(target),
         "ports": scan_ports(target),
         "whois": lookup(target),
         "technologies": detect(target),
         "ssl": analyze(target),
+        "security_headers": analyze_security_headers(target),
+        "robots": scan_robots(target),
+        "sitemap": scan_sitemap(target),
     }
