@@ -3,6 +3,7 @@ from rapo.tools.http import probe
 from rapo.tools.ports import scan_ports
 from rapo.tools.whois import lookup
 from rapo.tools.tech import detect
+from rapo.tools.ssl import analyze
 
 
 def run(target: str) -> dict:
@@ -16,4 +17,5 @@ def run(target: str) -> dict:
         "ports": scan_ports(target),
         "whois": lookup(target),
         "technologies": detect(target),
+        "ssl": analyze(target),
     }
