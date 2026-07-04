@@ -202,6 +202,79 @@ def _render_http_methods_section(http_methods_data: Any) -> None:
     )
 
 
+def _render_cookies_section(cookies_data: Any) -> None:
+    if not isinstance(cookies_data, dict):
+        cookies_data = {}
+
+    cookies = cookies_data.get("cookies", []) or []
+    if not cookies:
+        console.print(
+            Panel(
+                "[bold yellow]No cookies discovered.[/bold yellow]",
+                title="[bold cyan]🍪 Cookies[/bold cyan]",
+                border_style="bright_blue",
+                expand=True,
+            )
+        )
+        return
+
+    table = Table(show_header=False, box=None, pad_edge=False)
+    table.add_column("Field", style="bold cyan", width=28)
+    table.add_column("Value", overflow="fold")
+
+    for cookie in cookies:
+        table.add_row("Cookie Name", cookie.get("name", ""))
+        table.add_row("Secure", "Yes" if cookie.get("secure") else "No")
+        table.add_row("HttpOnly", "Yes" if cookie.get("httponly") else "No")
+        table.add_row("SameSite", str(cookie.get("samesite", "")))
+        table.add_row("Domain", str(cookie.get("domain", "")))
+        table.add_row("Path", str(cookie.get("path", "")))
+        table.add_row("", "")
+
+    console.print(
+        Panel(
+            table,
+            title="[bold cyan]🍪 Cookies[/bold cyan]",
+            border_style="bright_blue",
+            expand=True,
+        )
+    )
+
+
+def _render_waf_section(waf_data: Any) -> None:
+    if not isinstance(waf_data, dict):
+        waf_data = {}
+
+    if not waf_data.get("detected", False):
+        console.print(
+            Panel(
+                "[bold yellow]No WAF detected.[/bold yellow]",
+                title="[bold cyan]🛡 WAF Detection[/bold cyan]",
+                border_style="bright_blue",
+                expand=True,
+            )
+        )
+        return
+
+    table = Table(show_header=False, box=None, pad_edge=False)
+    table.add_column("Field", style="bold cyan", width=28)
+    table.add_column("Value", overflow="fold")
+
+    table.add_row("Detected", "Yes")
+    table.add_row("Vendor", str(waf_data.get("vendor", "Unknown")))
+    table.add_row("Confidence", str(waf_data.get("confidence", 0)))
+    table.add_row("Evidence", _format_value(waf_data.get("evidence", [])))
+
+    console.print(
+        Panel(
+            table,
+            title="[bold cyan]🛡 WAF Detection[/bold cyan]",
+            border_style="bright_blue",
+            expand=True,
+        )
+    )
+
+
 def _get_section(results: dict[str, Any], *keys: str) -> Any:
     for key in keys:
         if key in results:
@@ -252,6 +325,8 @@ Version 0.1
     _render_sitemap_section(_get_section(results, "sitemap"))
     _render_common_files_section(_get_section(results, "common_files"))
     _render_http_methods_section(_get_section(results, "http_methods"))
+    _render_cookies_section(_get_section(results, "cookies"))
+    _render_waf_section(_get_section(results, "waf"))
 
     console.print(
         Panel(

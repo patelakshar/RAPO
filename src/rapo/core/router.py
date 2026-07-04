@@ -9,6 +9,8 @@ from rapo.tools.robots import scan as scan_robots
 from rapo.tools.sitemap import scan as scan_sitemap
 from rapo.tools.common_files import scan as scan_common_files
 from rapo.tools.http_methods import scan as scan_http_methods
+from rapo.tools.cookies import analyze as analyze_cookies
+from rapo.tools.waf import detect as detect_waf
 
 
 def run(target: str) -> dict:
@@ -29,4 +31,6 @@ def run(target: str) -> dict:
         "sitemap": scan_sitemap(target),
         "common_files": scan_common_files(target),
         "http_methods": scan_http_methods(target),
+        "cookies": analyze_cookies(target),
+        "waf": detect_waf(target),
     }
