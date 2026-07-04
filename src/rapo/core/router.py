@@ -1,15 +1,15 @@
-"""
-RAPO Command Router
-"""
-
-from rapo.core.logger import Logger
-from rapo.tools.scanner import scan
+from rapo.tools.dns import enumerate_dns
+from rapo.tools.http import probe
+from rapo.tools.ports import scan_ports
 
 
-def route(command: str, target: str):
+def run(target: str) -> dict:
+    """
+    Run the RAPO reconnaissance pipeline.
+    """
 
-    if command == "scan":
-        scan(target)
-        return
-
-    Logger.error(f"Unknown command: {command}")
+    return {
+        "dns": enumerate_dns(target),
+        "http": probe(target),
+        "ports": scan_ports(target),
+    }
